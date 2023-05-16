@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    // id "com.palantir.docker" version "0.34.0"
+    // id "com.palantir.docker-run" version "0.34.0"
+}
+
+// version '0.1.0'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+jar {
+    baseName = 'test'
+    destinationDir = file("jars")
+    manifest {
+        attributes 'Main-Class': 'App'
+    }
+}
+
+task exec {
+    dependsOn "jar"
+    doLast {
+        exec {
+            commandLine 'docker', 'build', '-t', 'myimage', './jars'
+        }
+        exec {
+            commandLine 'docker', 'run', '-p', '80:80', '--name', 'mycontainer', 'myimage'
+        }
+
+        delete 'build'
+
+        exec {
+            commandLine 'docker', 'rm', 'mycontainer'
+        }
+        exec {
+            commandLine 'docker', 'rmi', 'myimage'
+        }
+    }
+}
