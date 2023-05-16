@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Workers</title>
+</head>
+<body>
+<div th:each="worker : ${workers}">
+  <p th:text="${worker.getFirstName()}">user</p>
+</div>
+</body>
+</html>
